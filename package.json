@@ -1,0 +1,12 @@
+{
+    "name": "overleaf-latex-formatter",
+    "private": true,
+    "type": "module",
+    "devDependencies": {
+        "esbuild": "^0.23.0",
+        "prettier-plugin-latex": "^2.0.1"
+    },
+    "scripts": {
+        "build": "esbuild formatter-src.js --bundle --format=iife --platform=browser --target=es2020 --global-name=OFHFormatter --outfile=formatter.bundle.js --minify"
+    }
+}

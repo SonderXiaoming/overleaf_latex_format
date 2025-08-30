@@ -1,0 +1,71 @@
+{
+    "manifest_version": 3,
+    "name": "Overleaf LaTeX Formatter",
+    "version": "0.1.0",
+    "description": "Format LaTeX on Overleaf",
+    "permissions": [
+        "scripting",
+        "contextMenus",
+        "tabs"
+    ],
+    "host_permissions": [
+        "https://www.overleaf.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
+        },
+        "default_title": "Overleaf Formatter"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.overleaf.com/*"
+            ],
+            "js": [
+                "formatter.bundle.js",
+                "page-hook.js"
+            ],
+            "run_at": "document_start",
+            "all_frames": true,
+            "match_about_blank": true,
+            "world": "MAIN"
+        },
+        {
+            "matches": [
+                "https://www.overleaf.com/*"
+            ],
+            "js": [
+                "messenger.js"
+            ],
+            "run_at": "document_start",
+            "all_frames": true,
+            "match_about_blank": true
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "page-hook.js",
+                "formatter.bundle.js"
+            ],
+            "matches": [
+                "https://www.overleaf.com/*"
+            ]
+        }
+    ],
+    "commands": {
+        "format-document": {
+            "suggested_key": {
+                "default": "Alt+Shift+F",
+                "mac": "Alt+Shift+F"
+            },
+            "description": "Format current LaTeX document (or selection)"
+        }
+    }
+}
