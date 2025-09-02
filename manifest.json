@@ -4,9 +4,7 @@
     "version": "0.1.0",
     "description": "Format LaTeX on Overleaf",
     "permissions": [
-        "scripting",
-        "contextMenus",
-        "tabs"
+        "contextMenus"
     ],
     "host_permissions": [
         "https://www.overleaf.com/*"

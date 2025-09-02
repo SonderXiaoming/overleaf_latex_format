@@ -1,28 +1,26 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
-        id: "formatSelection",
+        id: "ofh-format",
         title: "Format LaTeX (Overleaf)",
         contexts: ["all"],
         documentUrlPatterns: ["https://www.overleaf.com/*"]
     });
 });
 
-chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-    if (!tab?.id) return;
-    const action = info.menuItemId === "formatSelection" ? "FORMAT" : "null";
-    await chrome.tabs.sendMessage(tab.id, { type: action });
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+    if (info.menuItemId === "ofh-format" && tab && tab.id != null) {
+        chrome.tabs.sendMessage(tab.id, { type: "FORMAT" });
+    }
 });
 
-chrome.action.onClicked.addListener(async (tab) => {
-    if (!tab?.id) return;
-    await chrome.tabs.sendMessage(tab.id, { type: "FORMAT" });
-});
-
-// 从快捷键命令转发
-chrome.commands.onCommand.addListener(async (command) => {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (!tab?.id) return;
-    if (command === "format-document") {
-        await chrome.tabs.sendMessage(tab.id, { type: "FORMAT" });
+// 快捷键
+chrome.commands.onCommand.addListener((command) => {
+    if (command === "format-current-tab") {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            const t = tabs[0];
+            if (t && t.id != null && /^https:\/\/www\.overleaf\.com\//.test(t.url || "")) {
+                chrome.tabs.sendMessage(t.id, { type: "FORMAT" });
+            }
+        });
     }
 });
